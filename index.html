@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nocalty Reality - Registro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #001f3f;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 400px;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #3498db;
+            font-weight: 600;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        input[type="text"], input[type="password"], input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+        }
+        button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: #3498db;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        .footer a {
+            color: #3498db;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Crie sua conta no Nocalty Reality</h1>
+        <p>Preencha as informações abaixo para se registrar</p>
+        <form id="registration-form">
+            <input type="text" name="username" placeholder="Usuário" required>
+            <input type="email" name="email" placeholder="E-mail" required>
+            <input type="password" name="password" placeholder="Senha" required>
+            <input type="password" name="confirm_password" placeholder="Confirmar Senha" required>
+            <button type="submit">Registrar</button>
+        </form>
+        <div class="footer">
+            <p>Já tem uma conta? <a href="Nocaltydenovo.html">Faça login</a></p>
+            <p>&copy; 2024 Nocalty Reality</p>
+        </div>
+    </div>
+
+    <script type="module">
+        import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+        const SUPABASE_URL = "https://toblcjhbthapnaejzdax.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvYmxjamhidGhhcG5hZWp6ZGF4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM0MzM4NDUsImV4cCI6MjA0OTAwOTg0NX0.q1VzAL8yfMgLb2BjVpGxbOWYtUuHLXS1aTvpL_olg4k";
+        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        const form = document.getElementById("registration-form");
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const username = form.username.value;
+            const email = form.email.value;
+            const password = form.password.value;
+            const confirmPassword = form.confirm_password.value;
+
+            if (password !== confirmPassword) {
+                alert("As senhas não coincidem!");
+                return;
+            }
+
+            try {
+                const { data, error } = await supabase.auth.signUp({
+                    email,
+                    password,
+                    options: { data: { username } },
+                });
+
+                if (error) {
+                    alert("Erro ao registrar: " + error.message);
+                } else {
+                    alert("Registro bem-sucedido! Verifique seu e-mail.");
+                    window.location.href = "paginaprincipal.html";
+                }
+            } catch (err) {
+                alert("Erro desconhecido. Tente novamente.");
+                console.error(err);
+            }
+        });
+    </script>
+</body>
+</html>
